@@ -6,9 +6,10 @@ import * as websocket_client from './request/client.websocket'
 
 import Login from './login'
 import MainView from './mainview'
+import CreatePage from './CreatePage'
 
+import { Routes,Route,Link,Navigate,Outlet } from 'react-router-dom'
 
-import { Routes,Route,Link,Navigate } from 'react-router-dom'
 // 这里不知为何不能用{Login}
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
       <br />
       <hr />
       <div>
-        <Link to='/mainview' className=''>游客访问 / 退出登录</Link>
+        <Link to='/mainview' className='' onClick={localStorage.clear()}>游客访问 / 退出登录</Link>
       </div>
 
       <div>
@@ -35,7 +36,9 @@ function App() {
           {/* 自动跳转login */}
           <Route path='/' element={<Navigate to='/login' /> } />
           <Route path='/login' element={<Login /> } />
-          <Route path='/mainview' element={<MainView /> } />
+          <Route path='/mainview' element={<MainView />}/>
+          <Route path='/createcircle' element={<CreatePage />} />
+
         </Routes>
       </div>
     </>
