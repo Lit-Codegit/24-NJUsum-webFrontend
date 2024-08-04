@@ -26,10 +26,11 @@ function Login() {
                 
                 if (response.data.success) {
                     const token = true;
-                    const username = response.data.username;
+                    const username = response.data.username.username;
                     setLogin(true);
                     // 存储token，通常可以存储在localStorage或sessionStorage中
                     localStorage.setItem('authToken', token);
+                    localStorage.setItem('username', username);
                 } else {
                     alert('账号或密码不匹配,登录失败!')
                 }

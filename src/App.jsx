@@ -28,7 +28,12 @@ function App() {
       <br />
       <hr />
       <div>
-        <Link to='/mainview' className='' onClick={localStorage.clear()}>游客访问 / 退出登录</Link>
+        <Link to='/mainview' className='' onClick={() => {
+          localStorage.clear();
+          setTitle('');  // 纯纯是为了更新渲染
+        }}>游客访问 / 退出登录</Link>
+
+        {/* Tips: 在React使用onClick事件处理器时，需要确保事件处理器是一个函数，而不是直接调用一个函数。 */}
       </div>
 
       <div>

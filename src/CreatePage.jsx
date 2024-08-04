@@ -35,7 +35,7 @@ function CreatePage() {
                 }
             })
                 .then(response => {
-                    console.log('uploaded successfully:', response);
+                    console.log('Uploaded successfully:', response);
                 })
                 .catch(error => {
                     console.error('Error uploading file:', error);
