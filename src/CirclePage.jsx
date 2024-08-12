@@ -1,10 +1,14 @@
+// 特定兴趣圈内页面
+
+
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import * as axios from 'axios'
 import './App.css'
 
 function CirclePage() {
-    const { circle_id } = useParams(); // 获取URL参数中的circle_id
+    const authToken = localStorage.getItem('authToken');
+    const { circle_id } = useParams(); // 获取URL参数中的circle_id,名字必须一样!
     const [posts, setPosts] = useState([]); // 存储帖子列表
     const client = axios.default;
 
@@ -27,6 +31,10 @@ function CirclePage() {
                 {circle_id} - 兴趣圈
             </h1>
             <div>
+                {
+                    authToken ? <button><Link to={`/circle/${circle_id}/create_post`}>发帖</Link></button> : <hr></hr>
+                }
+                
                 <div className="post-list">
                     <h2>帖子列表</h2>
                     <ul>

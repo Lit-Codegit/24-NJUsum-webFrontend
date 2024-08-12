@@ -6,9 +6,10 @@ import * as websocket_client from './request/client.websocket'
 
 import Login from './login'
 import MainView from './mainview'
-import CreatePage from './CreatePage'
+import CreatePage from './CreateCircle'
 import CirclePage from './CirclePage'
-import { Routes,Route,Link,Navigate,Outlet } from 'react-router-dom'
+import CreatePost from './CreatePage'
+import { Routes, Route, Link, Navigate, Outlet } from 'react-router-dom'
 
 // 这里不知为何不能用{Login}
 
@@ -39,17 +40,18 @@ function App() {
       <div>
         <Routes>
           {/* 自动跳转login */}
-          <Route path='/' element={<Navigate to='/login' /> } />
-          <Route path='/login' element={<Login /> } />
-          <Route path='/mainview' element={<MainView />}/>
+          <Route path='/' element={<Navigate to='/login' />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/mainview' element={<MainView />} />
           <Route path='/createcircle' element={<CreatePage />} />
           <Route path='/circle/:circle_id' element={<CirclePage />} />
+          {/* <Route path='/circle/:circle_id/:post_id' element={ } /> */}
+          <Route path='/circle/:circle_id/create_post' element={<CreatePost />} />
 
-          
         </Routes>
       </div>
     </>
-    
+
   )
 }
 

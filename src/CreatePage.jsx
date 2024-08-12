@@ -1,83 +1,126 @@
-import React from 'react';
-import { Routes, Route, Link, Navigate } from 'react-router-dom'
-import { useState } from 'react'
-import * as axios from 'axios'
+// 创建帖子的页面
 
-function CreatePage() {
-    const [circleName, setCirName] = useState('');
-    const [selectedImage, setSelectedImage] = useState(null);
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as axios from 'axios';
+
+function CreatePost() {
+    const navigate = useNavigate();
+    const { circle_id } = useParams(); // circle_id参数
+
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imagesPaths, setImagesPaths] = useState([]);
 
     const client = axios.default;
-    const base = "http://127.0.0.1:7002/createcircle"
+    const base = "http://127.0.0.1:7002/createpost";
+
+    useEffect(() => {
+        // 确保circle_id存在
+        if (!circle_id) {
+            alert("无效的兴趣圈ID");
+            navigate('/'); // 重定向到首页
+        }
+    }, [circle_id, navigate]);
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    };
 
     const handleContentChange = (e) => {
-        setCirName(e.target.value);
+        setContent(e.target.value);
     };
 
     const handleImageChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            setSelectedImage(e.target.files[0]);
+        if (e.target.files) {
+            setSelectedImages([...e.target.files]);
+            // 设置图片路径
+            setImagesPaths(e.target.files.map(file => `http://127.0.0.1:7002/circles_pub/${circle_id}/${file.name}`));
         }
     };
 
-    const handleCreateCircle = async (e) => {
-        console.log('creating');
+    const handleCreatePost = async (e) => {
         e.preventDefault();
 
-        if (selectedImage) {
+        if (title && content && selectedImages.length > 0) {
             const formData = new FormData();
-            formData.append('file', selectedImage);
-            formData.append('circle_name', circleName);
+            formData.append('circle_id', circle_id);
+            formData.append('title', title);
+            formData.append('content', content);
+            formData.append('imagesPaths', JSON.stringify(imagesPaths)); // 发送图片路径数组
+            formData.append('owner', localStorage.getItem('username'))
 
-            await client.post(base, formData,{
+            selectedImages.forEach(image => {
+                formData.append('images', image);
+            });
+
+            await client.post(base, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
                 .then(response => {
-                    console.log('Uploaded successfully:', response.data);
+                    console.log('Post created successfully:', response.data);
                     if (response.data.success) {
-                        alert("创建成功! 现可回到首页查看并发帖!");
+                        alert("帖子创建成功!");
+                        navigate(`/circle/${circle_id}`); // 重定向到兴趣圈页面
                     } else {
-                        alert("已存在该兴趣圈");
+                        alert("创建失败: " + response.data.message);
                     }
-                    
                 })
                 .catch(error => {
-                    console.error('Error uploading file:', error);
-                    alert("未知失败");
-                })
-                
+                    console.error('Error creating post:', error);
+                    alert("未知错误");
+                });
+        } else {
+            alert("请填写标题、内容和至少一张图片");
         }
-    }
-    return (
-        <form onSubmit={handleCreateCircle}>
-            <div>
-                <label htmlFor="name">圈名：</label>
-                <textarea
-                    id="name"
-                    value={circleName}
-                    onChange={handleContentChange}
-                    rows="1"
+    };
 
+    return (
+        <form onSubmit={handleCreatePost}>
+            <div>
+                <label htmlFor="title">标题：</label>
+                <input
+                    type="text"
+                    id="title"
+                    value={title}
+                    onChange={handleTitleChange}
                 />
             </div>
 
             <div>
-                <label htmlFor="post-image">上传头图：</label>
+                <label htmlFor="content">内容：</label>
+                <textarea
+                    id="content"
+                    value={content}
+                    onChange={handleContentChange}
+                    rows="10"
+                />
+            </div>
+
+            <div>
+                <label htmlFor="images">上传图片：</label>
                 <input
                     type="file"
-                    id="post-image"
+                    id="images"
+                    multiple
                     onChange={handleImageChange}
                 />
-                {selectedImage && <p>已选择图片: {selectedImage.name}</p>}
+                {imagesPaths.map((path, index) => (
+                    <div key={index}>
+                        <p>已选择图片: {path}</p>
+                    </div>
+                ))}
             </div>
 
             <div>
-                <button>提交</button>
+                <button type="submit">提交</button>
             </div>
         </form>
     );
 }
 
-export default CreatePage;
+export default CreatePost;
