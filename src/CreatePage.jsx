@@ -35,10 +35,17 @@ function CreatePage() {
                 }
             })
                 .then(response => {
-                    console.log('Uploaded successfully:', response);
+                    console.log('Uploaded successfully:', response.data);
+                    if (response.data.success) {
+                        alert("创建成功! 现可回到首页查看并发帖!");
+                    } else {
+                        alert("已存在该兴趣圈");
+                    }
+                    
                 })
                 .catch(error => {
                     console.error('Error uploading file:', error);
+                    alert("未知失败");
                 })
                 
         }

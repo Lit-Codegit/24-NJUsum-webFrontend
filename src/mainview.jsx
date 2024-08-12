@@ -12,7 +12,6 @@ function MainView() {
 
     useEffect(() => {
     const fetchCircles = async () => {
-        // 使用axios发起GET请求获取circle数据
         const response = client.get('http://localhost:7002/api/circles')
             .then((response) => {
             // 更新组件状态以包含新获取的circle数据
@@ -20,7 +19,6 @@ function MainView() {
                 console.log(response.data);
             })
             .catch((error) => {
-
                 console.error('Error fetching circles:', error);
         });
         }
@@ -51,12 +49,12 @@ function MainView() {
                 )
             }
             <div>
-                <h1>Circles</h1>
+                <h1>Circles---兴趣圈一览</h1>
                 <ul>
                     {circles.map((circle, index) => (
                         <li key={index}>
                             <h2>{circle.circle_name}</h2>
-                            <p>Icon Name: {circle.icon_name}</p>
+                            <img src={circle.icon_url}/>
                             <p>Active Users:</p>
                             <ul>
                                 {circle.active_users.map((user, idx) => (
