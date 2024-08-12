@@ -14,7 +14,7 @@ function MainView() {
     const fetchCircles = async () => {
         const response = client.get('http://localhost:7002/api/circles')
             .then((response) => {
-            // 更新组件状态以包含新获取的circle数据
+            // 更新组件状态
                 setCircles(response.data);
                 console.log(response.data);
             })
@@ -54,7 +54,8 @@ function MainView() {
                     {circles.map((circle, index) => (
                         <li key={index}>
                             <h2>{circle.circle_name}</h2>
-                            <img src={circle.icon_url}/>
+                            <img src={circle.icon_url}></img>
+                            <p><Link to={`/circle/${circle.circle_id}`}>进入{circle.circle_name}</Link></p>
                             <p>Active Users:</p>
                             <ul>
                                 {circle.active_users.map((user, idx) => (

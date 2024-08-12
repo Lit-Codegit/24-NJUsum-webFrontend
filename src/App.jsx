@@ -7,7 +7,7 @@ import * as websocket_client from './request/client.websocket'
 import Login from './login'
 import MainView from './mainview'
 import CreatePage from './CreatePage'
-
+import CirclePage from './CirclePage'
 import { Routes,Route,Link,Navigate,Outlet } from 'react-router-dom'
 
 // 这里不知为何不能用{Login}
@@ -43,7 +43,9 @@ function App() {
           <Route path='/login' element={<Login /> } />
           <Route path='/mainview' element={<MainView />}/>
           <Route path='/createcircle' element={<CreatePage />} />
+          <Route path='/circle/:circle_id' element={<CirclePage />} />
 
+          
         </Routes>
       </div>
     </>

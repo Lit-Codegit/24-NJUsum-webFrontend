@@ -61,3 +61,23 @@
 .read-the-docs {
   color: #888;
 }
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  /* 间隔 */
+}
+
+.post-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  /* kuan */
+}
