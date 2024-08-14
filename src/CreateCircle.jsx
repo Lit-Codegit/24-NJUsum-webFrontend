@@ -32,6 +32,7 @@ function CreatePage() {
             formData.append('file', selectedImage);
             formData.append('circle_name', circleName);
 
+            console.log(formData);
             await client.post(base, formData,{
                 headers: {
                     'Content-Type': 'multipart/form-data'

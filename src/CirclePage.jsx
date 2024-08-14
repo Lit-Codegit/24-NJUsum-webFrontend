@@ -39,13 +39,15 @@ function CirclePage() {
                     <h2>帖子列表</h2>
                     <ul>
                         {posts.map((post, index) => (
-                            <li key={index} className="post-item">
-                                <div>
-                                    <h3>{post.title}</h3>
-                                    <p className="post-content">{post.content.substring(0, 10)}...</p> {/* 截断content */}
-                                    <p>作者：{post.owner}</p>
-                                </div>
-                            </li>
+                            <Link to={`/circle/${circle_id}/${post.post_id}`}>
+                                <li key={index} className="post-item">
+                                    <div>
+                                        <h3>{post.title}</h3>
+                                        <p className="post-content">{post.content.substring(0, 10)}...</p> {/* 截断content */}
+                                        <p>作者：{post.owner}</p>
+                                    </div>
+                                </li>
+                            </Link>
                         ))}
                     </ul>
                 </div>

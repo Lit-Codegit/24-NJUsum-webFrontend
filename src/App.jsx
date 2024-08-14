@@ -10,6 +10,7 @@ import CreatePage from './CreateCircle'
 import CirclePage from './CirclePage'
 import CreatePost from './CreatePage'
 import { Routes, Route, Link, Navigate, Outlet } from 'react-router-dom'
+import PostPage from './PostPage'
 
 // 这里不知为何不能用{Login}
 
@@ -45,7 +46,7 @@ function App() {
           <Route path='/mainview' element={<MainView />} />
           <Route path='/createcircle' element={<CreatePage />} />
           <Route path='/circle/:circle_id' element={<CirclePage />} />
-          {/* <Route path='/circle/:circle_id/:post_id' element={ } /> */}
+          <Route path='/circle/:circle_id/:post_id' element={<PostPage /> } />
           <Route path='/circle/:circle_id/create_post' element={<CreatePost />} />
 
         </Routes>

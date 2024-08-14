@@ -16,6 +16,7 @@ function CreatePost() {
 
     const client = axios.default;
     const base = "http://127.0.0.1:7002/createpost";
+    
 
     useEffect(() => {
         // 确保circle_id存在
@@ -34,11 +35,22 @@ function CreatePost() {
     };
 
     const handleImageChange = (e) => {
-        if (e.target.files) {
-            setSelectedImages([...e.target.files]);
-            // 设置图片路径
-            setImagesPaths(e.target.files.map(file => `http://127.0.0.1:7002/circles_pub/${circle_id}/${file.name}`));
+        client.get(`http://127.0.0.1:7002/getPostid/${circle_id}`).then(response => {
+            const post_id = response.data;
+            if (e.target.files) {
+                setSelectedImages([]); // 清空之前的图片列表
+                setImagesPaths([]); // 清空之前的图片路径列表
+                for (const file of e.target.files) {
+                    setSelectedImages([...selectedImages, file]); // 将新选择的文件添加到图片列表中
+                    setImagesPaths([...imagesPaths, `http://127.0.0.1:7002/circles_pub/${circle_id}/pic_${post_id}/${file.name}`]); // 设置新图片的路径
+                }
+            }
         }
+        ).catch(() => {
+            console.log("post_id failed!");
+        }
+        )
+        
     };
 
     const handleCreatePost = async (e) => {
@@ -46,15 +58,21 @@ function CreatePost() {
 
         if (title && content && selectedImages.length > 0) {
             const formData = new FormData();
+            selectedImages.map(image => {
+                formData.append('file', image);
+            })
+            //formData.append('file', selectedImages[0]);
             formData.append('circle_id', circle_id);
             formData.append('title', title);
             formData.append('content', content);
-            formData.append('imagesPaths', JSON.stringify(imagesPaths)); // 发送图片路径数组
+            // formData.append('imagesPaths', JSON.stringify(imagesPaths)); // 发送图片路径数组
             formData.append('owner', localStorage.getItem('username'))
-
-            selectedImages.forEach(image => {
-                formData.append('images', image);
+            // 开启 allowFieldsDuplication 之后，同名的 Field 会被合并为数组。
+            imagesPaths.map(image_path => {
+                formData.append('images_path', image_path);
             });
+            console.log(formData.get('images_path'));
+            // formData.append('images_path', imagesPaths[0]);
 
             await client.post(base, formData, {
                 headers: {
